@@ -13,6 +13,10 @@ const Login = () => {
   const navigate = useNavigate();
   // const { register, handleSubmit } = useForm();
 
+  const defaultValues = {
+    id: "A-0002",
+    password: "admin124",
+  };
   const [login] = useLoginMutation();
   const dispatch = useAppDispatch();
 
@@ -39,7 +43,7 @@ const Login = () => {
 
   return (
     <Row justify="center" align="middle" style={{ height: "100vh" }}>
-      <PHForm onSubmit={onSubmit}>
+      <PHForm onSubmit={onSubmit} defaultValues={defaultValues}>
         {/* <input type="text" id="id" {...register("id")} /> */}
         <PHInput type="text" name="id" label="Id:" />
         {/* <input type="text" id="password" {...register("password")} /> */}

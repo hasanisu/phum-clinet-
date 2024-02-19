@@ -29,7 +29,7 @@ const BaseWueryWIthRefreshToken: BaseQueryFn<
   DefinitionType
 > = async (args, api, extraOptions): Promise<any> => {
   let result = await baseQuery(args, api, extraOptions);
-  if (result.error?.status === 401) {
+  if (result?.error?.status === 401) {
     console.log("sending Refresh token");
     //* Send Refresh token
     const res = await fetch("http://localhost:5000/api/v1/auth/refresh-token", {
@@ -38,20 +38,21 @@ const BaseWueryWIthRefreshToken: BaseQueryFn<
     });
     const data = await res.json();
 
-    console.log(data);
+    console.log(data, "data");
 
     if (data?.data?.accessToken) {
       const user = (api.getState() as RootState).auth.user;
+
       api.dispatch(
         setUser({
           user,
           token: data.data.accessToken,
         })
       );
+      result = await baseQuery(args, api, extraOptions);
+    } else {
+      api.dispatch(logout());
     }
-    result = await baseQuery(args, api, extraOptions);
-  } else {
-    api.dispatch(logout());
   }
   return result;
 };
